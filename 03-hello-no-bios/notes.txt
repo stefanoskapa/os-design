@@ -1,7 +1,7 @@
 
 
 The default mode of the BIOS is Mode 3 (standard text mode), which is
-28 columns * 25 rows. Each character takes 2 bytes in memory though!
+80 columns * 25 rows. Each character takes 2 bytes in memory though!
 (character + attribute)
 
 
