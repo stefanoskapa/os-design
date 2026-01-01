@@ -1,0 +1,54 @@
+Instructions
+------------
+
+1. Compile with:
+    nasm boot.asm -f bin -o boot.bin
+
+2. Run the bootloader code:
+    qemu-system-i386 -hda boot.bin
+
+
+
+Takeaways
+---------
+
+The nasm option "-f" selects the output format: "bin' is for 
+flat raw binary. (see nasm --help)
+
+qemu -hda option instructs qemu to use "file" as a "hard disk 0" image.
+(a referrs to 0, so -hdb uses "hard disk 1")
+
+The BIOS loads the first 512-byte sector into memory at 
+address 0000:7c00 (physical address=0x7C00) and jumps to it. The bytes
+0x55 and 0xAA are called the "boot signature" and are used by legacy 
+BIOSes to identify a boot sector. 
+
+A sector is the smallest addressable unit of storage on a disk and
+is traditionally 512 bytes. LBA (Logical Block Addressing) is a simple
+linear numbering scheme for sectors. The Master Boot Record (MBR) lives
+at LBA 0.
+
+At this point, the CPU is in what is referred to as "real mode".
+In real mode, there's no virtual addressing, no paging, no memory protection. 
+Addresses are physical. Real mode is a simplistic 16-bit mode that is present
+on all x86 processors and was used in many operating systems before the birth
+of Protected Mode. For compatibility purposes, all x86 processors begin
+execution in Real Mode!
+
+physical = (segment << 4) + offset
+A physical address is a 20-bit address, and can't be greater than 0xFFFFF.
+
+So if CS (code segment) is 0x0000 and IP (instruction pointer) is 0x7C02, 
+the physical address is (0x0000 << 4) + 0x7C02 = 0x7C02.
+The BIOS typically sets up CS:IP as 0x0000:0x7C00 before jumping to your 
+bootloader, though some BIOSes use 0x07C0:0x0000, but both compute to the 
+same physical address 0x7C00.
+
+According to NASM manual, $ and $$ are special tokens.
+$ - evaluates to the assembly position ai the beginning of the line
+    containing the expression.
+$$ - evaluates to the beginning of the current section. (that equals
+    to 0 or whatever ORG was set to)
+
+so, $-$$ will give us a byte count from the start of the section up
+until before the current expression.
