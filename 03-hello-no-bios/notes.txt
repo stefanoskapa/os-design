@@ -1,0 +1,11 @@
+
+
+The default mode of the BIOS is Mode 3 (standard text mode), which is
+28 columns * 25 rows. Each character takes 2 bytes in memory though!
+(character + attribute)
+
+
+STOS instruction copies data from the A register into
+a memory location pointed by ES:DI. After the transfer,
+the DI register is incremented or decremented based on
+the state of the Direction Flag.

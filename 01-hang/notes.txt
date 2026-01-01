@@ -52,3 +52,20 @@ $$ - evaluates to the beginning of the current section. (that equals
 
 so, $-$$ will give us a byte count from the start of the section up
 until before the current expression.
+
+The IF flag is set by default, therefore hardware interrupts are
+allowed (in other words: hardware signals are able to pause
+program execution). This why ctrl-alt-del will restart (keyboard
+controller generates interrupt) and why the hard disk motor
+turns off (a hardware interrupt is normally called after a 
+timeout). By using the CLI instruction, we clear the IF and therefore
+no hardware interrupts will work anymore.
+
+
+ctrl-alt-1 -> emulated screen
+ctrl-alt-2 -> qemu monitor console
+useful qemu commands: 
+    sendkey ctrl-alt-delete
+    info status
+    qemu-system-i386 -hda boot.bin -icount shift=10 -monitor stdio 
+
